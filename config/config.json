@@ -1,0 +1,36 @@
+{
+    "development": {
+      "host": "ep-misty-sky-013835.eu-central-1.aws.neon.tech",
+      "dialect": "postgres",
+      "ssl": true,
+      "dialectOptions": {
+        "ssl": {
+          "require": true,
+          "rejectUnauthorized": false
+        }
+      }
+    },
+    "test": {
+      "host": "ep-polished-heart-018623.eu-central-1.aws.neon.tech",
+      "dialect": "postgres",
+      "ssl": true,
+      "dialectOptions": {
+        "ssl": {
+          "require": true,
+          "rejectUnauthorized": false
+        }
+      }
+    },
+    "production": {
+      "host": "ep-misty-cloud-658786.eu-central-1.aws.neon.tech",
+      "dialect": "postgres",
+      "ssl": true,
+      "dialectOptions": {
+        "ssl": {
+          "require": true,
+          "rejectUnauthorized": false
+        }
+      }
+    }
+  }
+  
