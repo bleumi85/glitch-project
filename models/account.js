@@ -9,8 +9,9 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
+    static associate({ RefreshToken }) {
       // define association here
+      this.hasMany(RefreshToken, { foreignKey: 'accountId', as: 'refreshTokens', onDelete: 'CASCADE' })
     }
   };
   Account.init({
@@ -20,20 +21,20 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: DataTypes.UUIDV4
     },
-    userName: DataTypes.STRING,
-    firstName: DataTypes.STRING,
-    lastName: DataTypes.STRING,
-    email: DataTypes.STRING,
-    role: DataTypes.STRING,
+    userName: { type: DataTypes.STRING, allowNull: false },
+    firstName: { type: DataTypes.STRING, allowNull: false },
+    lastName: { type: DataTypes.STRING, allowNull: false },
+    email: { type: DataTypes.STRING, allowNull: false },
+    role: { type: DataTypes.STRING, allowNull: false },
     expirationDate: DataTypes.DATEONLY,
-    passwordHash: DataTypes.STRING,
+    passwordHash: { type: DataTypes.STRING, allowNull: false },
     acceptTerms: DataTypes.BOOLEAN,
     verificationToken: DataTypes.STRING,
     verified: DataTypes.DATE,
     resetToken: DataTypes.STRING,
     resetTokenExpires: DataTypes.DATE,
     passwordReset: DataTypes.DATE,
-    created: DataTypes.DATE,
+    created: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW },
     updated: DataTypes.DATE,
     isVerified: {
       type: DataTypes.VIRTUAL,
@@ -43,7 +44,14 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     timestamps: false,
     underscored: true,
-    tableName: 'accounts'
+    tableName: "accounts",
+    defaultScope: {
+      // exclude password hash by default
+      attributes: { exclude: ["passwordHash"] },
+    },
+    scopes: {
+      withHash: { attributes: {}, }
+    }
   });
   return Account;
 };
