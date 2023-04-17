@@ -1,4 +1,4 @@
-const jwt = require("express-jwt");
+const jwt = require("jsonwebtoken");
 const { Account } = require("../models");
 
 require("dotenv").config();
@@ -15,7 +15,16 @@ function authorize(roles = []) {
 
     return [
         // authenticate JWT token and attach user to request object (req.user)
-        jwt({ secret, algorithms: ["HS256"] }),
+        async (req, res, next) => {
+            try {
+                const token = req.header("Authorization").replace("Bearer ", "");
+                const decoded = jwt.verify(token, secret, { algorithms: ["HS256"] });
+                req.user = decoded;
+                next();
+            } catch (err) {
+                return res.status(401).json({ message: "Unauthorized" });
+            }
+        },
 
         // authorize based on user role
         async (req, res, next) => {
